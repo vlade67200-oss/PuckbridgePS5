@@ -399,6 +399,16 @@ static int probe_one_path(const char *path, uint16_t *out_vid, uint16_t *out_pid
     }
 
     /* Everything below only ever touches the external bus. */
+    if (have_di && vid == VID_XBOX && pid == PID_XBOX) {
+    gp_log("probe: %s VID=%04x PID=%04x -> Xbox One S (exact)\n",
+           path, vid, pid);
+
+    *out_vid = vid;
+    *out_pid = pid;
+
+    close(fd);
+    return 1;
+}
     if (strncmp(path, "/dev/ugen2.", 11) != 0) { close(fd); return 0; }
 
     struct usb_fs_endpoint ep;
